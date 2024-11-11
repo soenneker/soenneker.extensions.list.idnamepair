@@ -17,7 +17,7 @@ public static class ListIdNamePairExtension
     /// <param name="id">The Id to check for.</param>
     /// <returns>True if the list contains an object with the specified Id; otherwise, false.</returns>
     [Pure]
-    public static bool ContainsId(this List<Dtos.IdNamePair.IdNamePair> value, string id)
+    public static bool ContainsId(this IList<Dtos.IdNamePair.IdNamePair> value, string id)
     {
         for (int i = 0; i < value.Count; i++)
         {
@@ -36,7 +36,7 @@ public static class ListIdNamePairExtension
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <returns>A list of Ids from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
     [Pure]
-    public static List<string> ToListOfIds(this List<Dtos.IdNamePair.IdNamePair> value)
+    public static List<string> ToListOfIds(this IList<Dtos.IdNamePair.IdNamePair> value)
     {
         int count = value.Count;
 
@@ -56,7 +56,7 @@ public static class ListIdNamePairExtension
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <returns>An enumerable of Ids from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
     [Pure]
-    private static IEnumerable<string> ToEnumerableOfIds(this List<Dtos.IdNamePair.IdNamePair> value)
+    private static IEnumerable<string> ToEnumerableOfIds(this IList<Dtos.IdNamePair.IdNamePair> value)
     {
         for (int i = 0; i < value.Count; i++)
         {
@@ -70,7 +70,7 @@ public static class ListIdNamePairExtension
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <returns>A list of DocumentIds from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
     [Pure]
-    public static List<string> ToListOfDocumentIds(this List<Dtos.IdNamePair.IdNamePair> value)
+    public static List<string> ToListOfDocumentIds(this IList<Dtos.IdNamePair.IdNamePair> value)
     {
         List<string> documentIds = new List<string>(value.Count);
 
@@ -88,7 +88,7 @@ public static class ListIdNamePairExtension
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <returns>An enumerable of DocumentIds from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
     [Pure]
-    public static IEnumerable<string> ToEnumerableOfDocumentIds(this List<Dtos.IdNamePair.IdNamePair> value)
+    public static IEnumerable<string> ToEnumerableOfDocumentIds(this IList<Dtos.IdNamePair.IdNamePair> value)
     {
         for (int i = 0; i < value.Count; i++)
         {
@@ -101,7 +101,7 @@ public static class ListIdNamePairExtension
     /// </summary>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <param name="toAdd">The <see cref="Dtos.IdNamePair.IdNamePair"/> object to add. Must not be null.</param>
-    public static void AddIfNotExists(this List<Dtos.IdNamePair.IdNamePair> value, Dtos.IdNamePair.IdNamePair toAdd)
+    public static void AddIfNotExists(this IList<Dtos.IdNamePair.IdNamePair> value, Dtos.IdNamePair.IdNamePair toAdd)
     {
         for (int i = 0; i < value.Count; i++)
         {
@@ -120,7 +120,7 @@ public static class ListIdNamePairExtension
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
     /// <param name="toAddRange">The range of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to add. Must not be null.</param>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
-    public static void AddRangeIfNotExists(this List<Dtos.IdNamePair.IdNamePair> value, List<Dtos.IdNamePair.IdNamePair> toAddRange)
+    public static void AddRangeIfNotExists(this IList<Dtos.IdNamePair.IdNamePair> value, List<Dtos.IdNamePair.IdNamePair> toAddRange)
     {
         HashSet<string> existingIds = new HashSet<string>(value.Count);
 
