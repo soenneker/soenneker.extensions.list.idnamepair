@@ -6,20 +6,22 @@ using Soenneker.Extensions.String;
 namespace Soenneker.Extensions.List.IdNamePair;
 
 /// <summary>
-/// A collection of helpful List{IdNamePair} extension methods
+/// A collection of helpful <see cref="List{T}"/> extension methods for working with lists of <see cref="Dtos.IdNamePair.IdNamePair"/> objects.
 /// </summary>
 public static class ListIdNamePairExtension
 {
     /// <summary>
-    /// Checks if the list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects contains an object with the specified Id.
+    /// Checks if the list contains an object with the specified Id.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <param name="id">The Id to check for.</param>
-    /// <returns>True if the list contains an object with the specified Id; otherwise, false.</returns>
+    /// <param name="id">The Id to search for within the list.</param>
+    /// <returns>True if an object with the specified Id exists in the list; otherwise, false.</returns>
+    /// <remarks>This method performs a linear search to locate an object with the given Id.</remarks>
     [Pure]
-    public static bool ContainsId(this IList<Dtos.IdNamePair.IdNamePair> value, string id)
+    public static bool ContainsId<T>(this IList<T> value, string id) where T : Dtos.IdNamePair.IdNamePair
     {
-        for (int i = 0; i < value.Count; i++)
+        for (var i = 0; i < value.Count; i++)
         {
             if (value[i].Id == id)
             {
@@ -31,18 +33,19 @@ public static class ListIdNamePairExtension
     }
 
     /// <summary>
-    /// Converts a list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to a list of their Ids.
+    /// Converts the list to a list of Id strings.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <returns>A list of Ids from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
+    /// <returns>A new <see cref="List{string}"/> containing the Ids of all objects in the original list.</returns>
+    /// <remarks>Each element in the resulting list represents the Id of the corresponding element in the original list.</remarks>
     [Pure]
-    public static List<string> ToListOfIds(this IList<Dtos.IdNamePair.IdNamePair> value)
+    public static List<string> ToListOfIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
         int count = value.Count;
+        var ids = new List<string>(count);
 
-        List<string> ids = new List<string>(count);
-
-        for (int i = 0; i < count; i++)
+        for (var i = 0; i < count; i++)
         {
             ids.Add(value[i].Id);
         }
@@ -51,30 +54,34 @@ public static class ListIdNamePairExtension
     }
 
     /// <summary>
-    /// Converts a list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to an enumerable of their Ids.
+    /// Converts the list to an enumerable collection of Id strings.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <returns>An enumerable of Ids from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
+    /// <returns>An <see cref="IEnumerable{string}"/> that yields each Id from the objects in the list.</returns>
+    /// <remarks>This method returns an iterator, allowing deferred execution for enumerating Ids.</remarks>
     [Pure]
-    private static IEnumerable<string> ToEnumerableOfIds(this IList<Dtos.IdNamePair.IdNamePair> value)
+    private static IEnumerable<string> ToEnumerableOfIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
-        for (int i = 0; i < value.Count; i++)
+        for (var i = 0; i < value.Count; i++)
         {
             yield return value[i].Id;
         }
     }
 
     /// <summary>
-    /// Converts a list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to a list of their DocumentIds.
+    /// Converts the list to a list of Document Ids derived from each object's Id.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <returns>A list of DocumentIds from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
+    /// <returns>A new <see cref="List{string}"/> containing Document Ids for each Id in the original list.</returns>
+    /// <remarks>This method assumes each Id can be split into a Document Id using <see cref="ToSplitId"/>.</remarks>
     [Pure]
-    public static List<string> ToListOfDocumentIds(this IList<Dtos.IdNamePair.IdNamePair> value)
+    public static List<string> ToListOfDocumentIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
-        List<string> documentIds = new List<string>(value.Count);
+        var documentIds = new List<string>(value.Count);
 
-        for (int i = 0; i < value.Count; i++)
+        for (var i = 0; i < value.Count; i++)
         {
             documentIds.Add(value[i].Id.ToSplitId().DocumentId);
         }
@@ -83,27 +90,31 @@ public static class ListIdNamePairExtension
     }
 
     /// <summary>
-    /// Converts a list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to an enumerable of their DocumentIds.
+    /// Converts the list to an enumerable collection of Document Ids derived from each object's Id.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <returns>An enumerable of DocumentIds from the provided <see cref="Dtos.IdNamePair.IdNamePair"/> objects.</returns>
+    /// <returns>An <see cref="IEnumerable{string}"/> that yields each Document Id from the list's objects.</returns>
+    /// <remarks>This method allows for deferred execution, providing Document Ids one at a time as they are iterated.</remarks>
     [Pure]
-    public static IEnumerable<string> ToEnumerableOfDocumentIds(this IList<Dtos.IdNamePair.IdNamePair> value)
+    public static IEnumerable<string> ToEnumerableOfDocumentIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
-        for (int i = 0; i < value.Count; i++)
+        for (var i = 0; i < value.Count; i++)
         {
             yield return value[i].Id.ToSplitId().DocumentId;
         }
     }
 
     /// <summary>
-    /// Adds an <see cref="Dtos.IdNamePair.IdNamePair"/> object to the list if an object with the same Id does not already exist.
+    /// Adds an object to the list if no object with the same Id exists in the list.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <param name="toAdd">The <see cref="Dtos.IdNamePair.IdNamePair"/> object to add. Must not be null.</param>
-    public static void AddIfNotExists(this IList<Dtos.IdNamePair.IdNamePair> value, Dtos.IdNamePair.IdNamePair toAdd)
+    /// <param name="toAdd">The object to add if its Id is not already in the list. Must not be null.</param>
+    /// <remarks>If an object with the same Id is found, the method returns without adding <paramref name="toAdd"/>.</remarks>
+    public static void AddIfNotExists<T>(this IList<T> value, T toAdd) where T : Dtos.IdNamePair.IdNamePair
     {
-        for (int i = 0; i < value.Count; i++)
+        for (var i = 0; i < value.Count; i++)
         {
             if (value[i].Id == toAdd.Id)
             {
@@ -115,21 +126,28 @@ public static class ListIdNamePairExtension
     }
 
     /// <summary>
-    /// Adds a range of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to the list if objects with the same Ids do not already exist.
+    /// Adds a range of objects to the list if objects with the same Ids do not already exist.
     /// </summary>
+    /// <typeparam name="T">A type derived from <see cref="Dtos.IdNamePair.IdNamePair"/>.</typeparam>
     /// <param name="value">The list of <see cref="Dtos.IdNamePair.IdNamePair"/> objects. Must not be null.</param>
-    /// <param name="toAddRange">The range of <see cref="Dtos.IdNamePair.IdNamePair"/> objects to add. Must not be null.</param>
-    /// <exception cref="ArgumentNullException">Thrown if the <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
-    public static void AddRangeIfNotExists(this IList<Dtos.IdNamePair.IdNamePair> value, List<Dtos.IdNamePair.IdNamePair> toAddRange)
+    /// <param name="toAddRange">A list of objects to add. Only objects with unique Ids will be added.</param>
+    /// <remarks>
+    /// This method first collects existing Ids into a set, then iterates through <paramref name="toAddRange"/> to add only those objects with unique Ids.
+    /// </remarks>
+    /// <exception cref="ArgumentNullException">Thrown if either <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
+    public static void AddRangeIfNotExists<T>(this IList<T> value, IList<T> toAddRange) where T : Dtos.IdNamePair.IdNamePair
     {
-        HashSet<string> existingIds = new HashSet<string>(value.Count);
+        if (value == null) throw new ArgumentNullException(nameof(value));
+        if (toAddRange == null) throw new ArgumentNullException(nameof(toAddRange));
 
-        for (int i = 0; i < value.Count; i++)
+        var existingIds = new HashSet<string>(value.Count);
+
+        for (var i = 0; i < value.Count; i++)
         {
             existingIds.Add(value[i].Id);
         }
 
-        for (int i = 0; i < toAddRange.Count; i++)
+        for (var i = 0; i < toAddRange.Count; i++)
         {
             if (existingIds.Add(toAddRange[i].Id))
             {
