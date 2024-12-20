@@ -1,13 +1,13 @@
-using Soenneker.Tests.FixturedUnit;
+using Soenneker.Tests.Unit;
 using Xunit;
-
 
 namespace Soenneker.Extensions.List.IdNamePair.Tests;
 
-[Collection("Collection")]
-public class ListIdNamePairExtensionTests : FixturedUnitTest
+public class ListIdNamePairExtensionTests : UnitTest
 {
-    public ListIdNamePairExtensionTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    [Fact]
+    public void Default()
     {
+
     }
 }
