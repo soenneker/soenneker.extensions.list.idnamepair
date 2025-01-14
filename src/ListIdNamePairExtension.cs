@@ -21,9 +21,16 @@ public static class ListIdNamePairExtension
     [Pure]
     public static bool ContainsId<T>(this IList<T> value, string id) where T : Dtos.IdNamePair.IdNamePair
     {
+        if (value is null || value.Count == 0)
+            return false;
+
+        if (id.IsNullOrEmpty())
+            return false;
+
+        // Iterate through the list and check for the matching ID
         for (var i = 0; i < value.Count; i++)
         {
-            if (value[i].Id == id)
+            if (string.Equals(value[i].Id, id, StringComparison.Ordinal))
             {
                 return true;
             }
@@ -42,12 +49,19 @@ public static class ListIdNamePairExtension
     [Pure]
     public static List<string> ToListOfIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
+        // Early return for null or empty input
+        if (value is null || value.Count == 0)
+            return [];
+
         int count = value.Count;
+
         var ids = new List<string>(count);
 
         for (var i = 0; i < count; i++)
         {
-            ids.Add(value[i].Id);
+            string id = value[i].Id;
+
+            ids.Add(id);
         }
 
         return ids;
@@ -79,11 +93,18 @@ public static class ListIdNamePairExtension
     [Pure]
     public static List<string> ToListOfDocumentIds<T>(this IList<T> value) where T : Dtos.IdNamePair.IdNamePair
     {
-        var documentIds = new List<string>(value.Count);
+        if (value is null || value.Count == 0)
+            return [];
 
-        for (var i = 0; i < value.Count; i++)
+        int count = value.Count;
+
+        var documentIds = new List<string>(count);
+
+        for (var i = 0; i < count; i++)
         {
-            documentIds.Add(value[i].Id.ToSplitId().DocumentId);
+            string documentId = value[i].Id.ToSplitId().DocumentId;
+
+            documentIds.Add(documentId);
         }
 
         return documentIds;
@@ -114,9 +135,11 @@ public static class ListIdNamePairExtension
     /// <remarks>If an object with the same Id is found, the method returns without adding <paramref name="toAdd"/>.</remarks>
     public static void AddIfNotExists<T>(this IList<T> value, T toAdd) where T : Dtos.IdNamePair.IdNamePair
     {
+        string newId = toAdd.Id;
+
         for (var i = 0; i < value.Count; i++)
         {
-            if (value[i].Id == toAdd.Id)
+            if (string.Equals(value[i].Id, newId, StringComparison.Ordinal))
             {
                 return;
             }
@@ -137,10 +160,16 @@ public static class ListIdNamePairExtension
     /// <exception cref="ArgumentNullException">Thrown if either <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
     public static void AddRangeIfNotExists<T>(this IList<T> value, IList<T> toAddRange) where T : Dtos.IdNamePair.IdNamePair
     {
-        if (value == null) throw new ArgumentNullException(nameof(value));
-        if (toAddRange == null) throw new ArgumentNullException(nameof(toAddRange));
+        if (value == null)
+            throw new ArgumentNullException(nameof(value));
 
-        var existingIds = new HashSet<string>(value.Count);
+        if (toAddRange == null)
+            throw new ArgumentNullException(nameof(toAddRange));
+
+        if (toAddRange.Count == 0)
+            return;
+
+        var existingIds = new HashSet<string>(value.Count + toAddRange.Count, StringComparer.Ordinal);
 
         for (var i = 0; i < value.Count; i++)
         {
@@ -149,9 +178,11 @@ public static class ListIdNamePairExtension
 
         for (var i = 0; i < toAddRange.Count; i++)
         {
-            if (existingIds.Add(toAddRange[i].Id))
+            var newItem = toAddRange[i];
+
+            if (existingIds.Add(newItem.Id))
             {
-                value.Add(toAddRange[i]);
+                value.Add(newItem);
             }
         }
     }
