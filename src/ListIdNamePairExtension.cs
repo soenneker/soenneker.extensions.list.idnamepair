@@ -160,10 +160,10 @@ public static class ListIdNamePairExtension
     /// <exception cref="ArgumentNullException">Thrown if either <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
     public static void AddRangeIfNotExists<T>(this IList<T> value, IList<T> toAddRange) where T : Dtos.IdNamePair.IdNamePair
     {
-        if (value == null)
+        if (value is null)
             throw new ArgumentNullException(nameof(value));
 
-        if (toAddRange == null)
+        if (toAddRange is null)
             throw new ArgumentNullException(nameof(toAddRange));
 
         if (toAddRange.Count == 0)
