@@ -150,7 +150,7 @@ public static class ListIdNamePairExtension
     /// <param name="toAddRange">The source list. Must not be null.</param>
     /// <remarks>
     /// For small ranges, this uses linear scans (zero allocations).
-    /// For larger ranges, it builds a <see cref="HashSet{T}"/> of existing Ids to reduce comparisons.
+    /// For larger ranges, it builds a hash set of existing Id strings to reduce comparisons.
     /// </remarks>
     /// <exception cref="ArgumentNullException">Thrown if <paramref name="value"/> or <paramref name="toAddRange"/> is null.</exception>
     public static void AddRangeIfNotExists<T>(this IList<T> value, IList<T> toAddRange) where T : Dtos.IdNamePair.IdNamePair
