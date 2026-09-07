@@ -91,7 +91,10 @@ public static class ListIdNamePairExtension
         var documentIds = new List<string>(count);
 
         for (int i = 0; i < count; i++)
-            documentIds.Add(value[i].Id.ToSplitId().DocumentId);
+        {
+            string id = value[i].Id;
+            documentIds.Add(id[id.ToSplitIdRanges().Document]);
+        }
 
         return documentIds;
     }
@@ -113,7 +116,10 @@ public static class ListIdNamePairExtension
             throw new ArgumentNullException(nameof(value));
 
         for (int i = 0, count = value.Count; i < count; i++)
-            yield return value[i].Id.ToSplitId().DocumentId;
+        {
+            string id = value[i].Id;
+            yield return id[id.ToSplitIdRanges().Document];
+        }
     }
 
     /// <summary>
